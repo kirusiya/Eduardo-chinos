@@ -4,9 +4,9 @@
 </button>
 <div>
   <a href="<?php echo $website;?>" class="sidebar-logo">
-    <img src="<?php echo $website;?>/assets/images/logo.png" alt="site logo" class="light-logo">
-    <img src="<?php echo $website;?>/assets/images/logo-light.png" alt="site logo" class="dark-logo">
-    <img src="<?php echo $website;?>/assets/images/logo-icon.png" alt="site logo" class="logo-icon">
+    <img src="<?php echo $website;?>/assets/images/logo-chatgpt.png" alt="site logo" class="light-logo">
+    <img src="<?php echo $website;?>/assets/images/logo-chatgpt.png" alt="site logo" class="dark-logo">
+    <img src="<?php echo $website;?>/assets/images/logo-chatgpt.png" alt="site logo" class="logo-icon">
   </a>
 </div>
 <div class="sidebar-menu-area">

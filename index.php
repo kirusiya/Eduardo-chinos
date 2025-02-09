@@ -1,12 +1,12 @@
 <?php
-include('./include/core.php');
+include('include/core.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wowdash - Bootstrap 5 Admin Dashboard HTML Template</title>
+  <title>Wallet</title>
   <link rel="icon" type="image/png" href="<?php echo $website;?>/assets/images/favicon.png" sizes="16x16">
   <!-- remix icon font css  -->
   <link rel="stylesheet" href="<?php echo $website;?>/assets/css/remixicon.css">
@@ -39,6 +39,43 @@ include('./include/core.php');
   <!-- main css -->
   <link rel="stylesheet" href="<?php echo $website;?>/assets/css/style.css">
 </head>
+
+<style>
+.crypto-item {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.crypto-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.positive {
+  color: #16c784;
+}
+
+.negative {
+  color: #ea3943;
+}
+
+.price-flash {
+  animation: flash 0.5s ease-in-out;
+}
+
+@keyframes flash {
+  0% {
+    background-color: rgba(22, 199, 132, 0.1);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+
+</style>
+
+
 <body>
 
 
@@ -58,12 +95,33 @@ include('./include/core.php');
             </a>
             </li>
             <li>-</li>
-            <li class="fw-medium">Cryptocracy</li>
+            <li class="fw-medium">Cryptocurrency</li>
         </ul>
         </div>
         
         <!-- Crypto Home Widgets Start -->
         <div class="row row-cols-xxxl-5 row-cols-lg-3 row-cols-sm-2 row-cols-1 gy-4">
+
+            <div class="col">
+                <div class="card shadow-none border bg-gradient-end-2">
+                    <div class="card-body p-20">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                            <img src="<?php echo $website;?>/assets/images/currency/crypto-img6.png" alt="" class="w-40-px h-40-px rounded-circle flex-shrink-0">
+                            <div class="flex-grow-1">
+                                <h6 class="text-xl mb-1">Tether</h6>
+                            <p class="fw-medium text-secondary-light mb-0">USDT</p>
+                            </div>
+                        </div>
+                        <div class="mt-3 d-flex flex-wrap justify-content-between align-items-center gap-1">
+                            <div class="">
+                                <h6 class="mb-8 precioUSDTAni text-xl">$33,550,700.98</h6>
+                                <span class="animacionUsdt text-success-main text-md">+ 0.00%</span> 
+                            </div>
+                            <div id="usdtAreaChart" class="remove-tooltip-title rounded-tooltip-value"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
             <div class="col">
                 <div class="card shadow-none border bg-gradient-end-3">
@@ -77,8 +135,8 @@ include('./include/core.php');
                         </div>
                         <div class="mt-3 d-flex flex-wrap justify-content-between align-items-center gap-1">
                             <div class="">
-                                <h6 class="mb-8">$45,138</h6>
-                                <span class="text-success-main text-md">+ 27%</span> 
+                                <h6 class="mb-8 precioBTCAni text-xl">$9,400,670.40</h6>
+                                <span class="animacionBTC text-success-main text-md">+ 0.00%</span> 
                             </div>
                             <div id="bitcoinAreaChart" class="remove-tooltip-title rounded-tooltip-value"></div>
                         </div>
@@ -86,6 +144,7 @@ include('./include/core.php');
                 </div>
             </div>
 
+            <!-- ocultar otras cryptos
             <div class="col">
                 <div class="card shadow-none border bg-gradient-end-1">
                     <div class="card-body p-20">
@@ -169,9 +228,29 @@ include('./include/core.php');
                     </div>
                 </div>
             </div>
+            -->
 
         </div>
         <!-- Crypto Home Widgets End -->
+
+        <div class="row gy-4 mt-4">
+            <div class="col-xxl-8">
+                <div class="row gy-4">
+                    <div class="col-12">
+                        <div class="card h-100 radius-8 border-0">
+                            <div class="card-body p-24">
+                                <h6 class="mb-4 fw-bold text-lg  mb-20">Coin Analytics</h6>
+                                <div id="cryptoWidget" class="w-100">
+                                    <!-- Los datos en tiempo real se insertarán aquí -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
         <div class="row gy-4 mt-4">
 
@@ -182,9 +261,9 @@ include('./include/core.php');
                         <div class="card h-100 radius-8 border-0">
                             <div class="card-body p-24">
                                 <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
-                                    <h6 class="mb-2 fw-bold text-lg">Coin Analytics</h6>
+                                    <h6 class="mb-2 fw-bold text-lg">Bitcoin Analytics</h6>
                                     
-                                    <div class="d-flex flex-wrap align-items-center gap-4">
+                                    <div class="d-flex flex-wrap align-items-center gap-4 d-none">
                                         <div class="form-check d-flex align-items-center">
                                             <input class="form-check-input" type="radio" name="crypto" id="BTC">
                                             <label class="form-check-label line-height-1 fw-medium text-secondary-light" for="BTC"> BTC </label>
@@ -203,20 +282,14 @@ include('./include/core.php');
                                         </div>
                                     </div>
                                     
-                                    <select class="form-select form-select-sm w-auto bg-base border text-secondary-light radius-8">
-                                        <option>Yearly</option>
-                                        <option>Monthly</option>
-                                        <option>Weekly</option>
-                                        <option>Today</option>
-                                    </select>
                                 </div>
             
-                                <div class="d-flex align-items-center gap-2 mt-12">
-                                    <h6 class="fw-semibold mb-0">$25,000</h6>
+                                <div class="d-flex align-items-center gap-2 mt-12 candleStickChartData">
+                                    <h6 class="fw-semibold mb-0 title">$96,056.03</h6>
                                     <p class="text-sm mb-0 d-flex align-items-center gap-1">
                                         Bitcoin (BTC)
-                                        <span class="bg-success-focus border border-success px-8 py-2 rounded-pill fw-semibold text-success-main text-sm d-inline-flex align-items-center gap-1">
-                                            10%
+                                        <span id="porcentajeCSS" class="bg-success-focus border border-success px-8 py-2 rounded-pill fw-semibold text-success-main text-sm d-inline-flex align-items-center gap-1">
+                                            <span id="porcentaje">10%</span>
                                             <iconify-icon icon="iconamoon:arrow-up-2-fill" class="icon"></iconify-icon>  
                                         </span> 
                                     </p>
@@ -227,7 +300,9 @@ include('./include/core.php');
                             </div>
                         </div>
                     </div>
-                    <div class="col-xxl-6">
+
+
+                    <div class="col-xxl-6 d-none">
                         <div class="card h-100 radius-8 border-0">
                             <div class="card-body p-24">
                                 <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between mb-20">
@@ -318,7 +393,7 @@ include('./include/core.php');
                         </div>
                     </div>
 
-                    <div class="col-xxl-6">
+                    <div class="col-xxl-6 d-none">
                         <div class="card h-100 radius-8 border-0">
                         <div class="card-body p-24">
                                 <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between mb-20">
@@ -401,7 +476,7 @@ include('./include/core.php');
                         </div>
                     </div>
 
-                    <div class="col-xxl-12">
+                    <div class="col-xxl-12 d-none">
                         <div class="card h-100">
                             <div class="card-body p-24">
                                 <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between mb-20">
@@ -551,7 +626,7 @@ include('./include/core.php');
 
             <div class="col-xxl-4">
                 <div class="row gy-4">
-                    <div class="col-xxl-12 col-lg-6">
+                    <div class="col-xxl-12 col-lg-6 d-none">
                         <div class="card h-100 radius-8 border-0">
                             <div class="card-body">
                                 <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between mb-20">
@@ -653,7 +728,7 @@ include('./include/core.php');
                         <div class="card h-100">
                             <div class="card-body p-24">
                                 <span class="mb-4 text-sm text-secondary-light">Total Balance</span>
-                                <h6 class="mb-4">$320,320.00</h6>
+                                <h6 class="mb-4">$42,951,371.38</h6>
 
                                 <ul class="nav nav-pills pill-tab mb-24 mt-28 border input-form-light p-1 radius-8 bg-neutral-50" id="pills-tab" role="tablist">
                                     <li class="nav-item w-50" role="presentation">
@@ -698,7 +773,7 @@ include('./include/core.php');
                                         </div>
                                         <div class="mb-24">  
                                             <span class="mb-4 text-sm text-secondary-light">Total Balance</span>
-                                            <h6 class="mb-4 fw-semibold text-xl text-warning-main">$320,320.00</h6>
+                                            <h6 class="mb-4 fw-semibold text-xl text-warning-main">$42,951,371.38</h6>
                                         </div>
                                         <a href="" class="btn btn-primary text-sm btn-sm px-8 py-12 w-100 radius-8"> Transfer Now</a>
                                     </div>
@@ -737,7 +812,7 @@ include('./include/core.php');
                                         </div>
                                         <div class="mb-24">  
                                             <span class="mb-4 text-sm text-secondary-light">Total Balance</span>
-                                            <h6 class="mb-4 fw-semibold text-xl text-warning-main">$320,320.00</h6>
+                                            <h6 class="mb-4 fw-semibold text-xl text-warning-main">$42,951,371.38</h6>
                                         </div>
                                         <a href="" class="btn btn-primary text-sm btn-sm px-8 py-12 w-100 radius-8"> Transfer Now</a>
                                     </div>
@@ -746,7 +821,7 @@ include('./include/core.php');
                             </div>
                         </div>
                     </div>
-                    <div class="col-xxl-12 col-lg-6">
+                    <div class="col-xxl-12 col-lg-6 d-none">
                         <div class="card h-100 radius-8 border-0">
                             <div class="card-body p-24">
                                 <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
@@ -798,7 +873,7 @@ include('./include/core.php');
   <!-- Bootstrap js -->
   <script src="<?php echo $website;?>/assets/js/lib/bootstrap.bundle.min.js"></script>
   <!-- Apex Chart js -->
-  <script src="<?php echo $website;?>/assets/js/lib/apexcharts.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <!-- Data Table js -->
   <script src="<?php echo $website;?>/assets/js/lib/dataTables.min.js"></script>
   <!-- Iconify Font js -->
@@ -822,7 +897,395 @@ include('./include/core.php');
   <!-- main js -->
   <script src="<?php echo $website;?>/assets/js/app.js"></script>
 
-<script src="<?php echo $website;?>/assets/js/homeFourChart.js"></script>    
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="<?php echo $website;?>/assets/js/homeFourChart.js"></script> 
+
+
+
+<script>
+
+
+
+
+/****************************************************** */
+
+
+$(document).ready(() => {
+  const cryptoData = {
+    BTCUSDT: { name: "Bitcoin", symbol: "BTC", price: 0, prevPrice: 0, change: 0, chartData: [] },
+    ETHUSDT: { name: "Ethereum", symbol: "ETH", price: 0, prevPrice: 0, change: 0, chartData: [] },
+    SOLUSDT: { name: "Solana", symbol: "SOL", price: 0, prevPrice: 0, change: 0, chartData: [] },
+    BNBUSDT: { name: "Binance", symbol: "BNB", price: 0, prevPrice: 0, change: 0, chartData: [] },
+    USDCUSDT: { name: "Tether", symbol: "USDT", price: 0, prevPrice: 0, change: 0, chartData: [] },
+  }
+
+  const chartInstances = {
+    BTCUSDT: null,
+    ETHUSDT: null,
+    USDCUSDT: null,
+  }
+
+  function initializeChart(chartId, chartColor, isUSDT = false) {
+    const options = {
+      series: [
+        {
+          name: "Price Change",
+          data: [],
+        },
+      ],
+      chart: {
+        type: "area",
+        width: 130,
+        height: 50,
+        sparkline: {
+          enabled: true,
+        },
+        animations: {
+          enabled: true,
+          easing: "linear",
+          dynamicAnimation: {
+            speed: 500,
+          },
+        },
+        toolbar: {
+          show: false,
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        curve: "smooth",
+        width: 2,
+        colors: [chartColor],
+        lineCap: "round",
+      },
+      grid: {
+        show: false,
+        padding: {
+          top: -3,
+          right: 0,
+          bottom: 0,
+          left: 0,
+        },
+      },
+      fill: {
+        type: "gradient",
+        colors: [chartColor],
+        gradient: {
+          shade: "light",
+          type: "vertical",
+          shadeIntensity: 0.5,
+          gradientToColors: [`${chartColor}00`],
+          inverseColors: false,
+          opacityFrom: 0.7,
+          opacityTo: 0.3,
+          stops: [0, 100],
+        },
+      },
+      markers: {
+        colors: [chartColor],
+        strokeWidth: 2,
+        size: 0,
+        hover: {
+          size: 8,
+        },
+      },
+      tooltip: {
+        fixed: {
+          enabled: true,
+          position: "topRight",
+          offsetX: 0,
+          offsetY: -25,
+        },
+        x: {
+          show: false,
+        },
+        y: {
+          formatter: (value) => {
+            if (isUSDT) {
+              // Mostrar 8 decimales para USDT
+              return (value / 1000000).toFixed(8) + "%"
+            }
+            return value + "%"
+          },
+        },
+        marker: {
+          show: false,
+        },
+      },
+      xaxis: {
+        labels: {
+          show: false,
+        },
+        tooltip: {
+          enabled: false,
+        },
+      },
+      yaxis: {
+        labels: {
+          show: false,
+        },
+        decimalsInFloat: isUSDT ? 6 : 2,
+      },
+    }
+
+    return new ApexCharts(document.querySelector(`#${chartId}`), options)
+  }
+
+  function updateChart(symbol, price, change) {
+    console.log(`updateChart llamado para ${symbol}`, { price, change })
+    const chartId = symbol === "BTCUSDT" ? "bitcoinAreaChart" : "usdtAreaChart"
+    const chartColor = symbol === "BTCUSDT" ? "#F98C08" : "#2775CA"
+    const isUSDT = symbol === "USDCUSDT"
+
+    // Verificar si el elemento existe
+    const chartElement = document.querySelector(`#${chartId}`)
+    if (!chartElement) {
+      console.log(`Elemento #${chartId} no encontrado`)
+      return
+    }
+
+    if (!chartInstances[symbol]) {
+      chartInstances[symbol] = initializeChart(chartId, chartColor, isUSDT)
+
+      // Inicializar con datos aleatorios pequeños solo para USDT
+      if (isUSDT) {
+        // Generar 15 valores aleatorios pequeños entre 0.00001 y 0.00002
+        cryptoData[symbol].chartData = Array(15)
+          .fill(0)
+          .map(() => Math.random() * 0.00001 + 0.00001)
+      }
+
+      chartInstances[symbol].render()
+    }
+
+    // Mantener solo los últimos 15 puntos de datos
+    if (cryptoData[symbol].chartData.length >= 15) {
+      cryptoData[symbol].chartData.shift()
+    }
+
+    // Procesar el cambio solo para USDT
+    if (isUSDT) {
+      // Usar el valor completo sin redondear
+      let adjustedChange = change
+
+      // Si el cambio es 0, usar un valor aleatorio pequeño
+      if (adjustedChange === 0) {
+        adjustedChange = Math.random() * 0.00001 + 0.00001
+      }
+
+      // Multiplicar por un factor mayor para hacer más visibles las variaciones pequeñas
+      adjustedChange = adjustedChange * 1000000
+
+      cryptoData[symbol].chartData.push(adjustedChange)
+    } else {
+      cryptoData[symbol].chartData.push(change)
+    }
+
+    // Actualizar el gráfico solo si la instancia existe
+    if (chartInstances[symbol]) {
+      chartInstances[symbol].updateSeries([
+        {
+          data: cryptoData[symbol].chartData,
+        },
+      ])
+    }
+  }
+
+  const icons = {
+    BTC: "https://cryptologos.cc/logos/bitcoin-btc-logo.png",
+    ETH: "https://cryptologos.cc/logos/ethereum-eth-logo.png",
+    SOL: "https://cryptologos.cc/logos/solana-sol-logo.png",
+    BNB: "https://cryptologos.cc/logos/bnb-bnb-logo.png",
+    USDT: "https://cryptologos.cc/logos/tether-usdt-logo.png",
+  }
+
+  // Conectar a WebSocket de Binance
+  const ws = new WebSocket("wss://stream.binance.com:9443/ws")
+
+  const subscribeMsg = {
+    method: "SUBSCRIBE",
+    params: ["btcusdt@ticker", "ethusdt@ticker", "solusdt@ticker", "bnbusdt@ticker", "usdcusdt@ticker"],
+    id: 1,
+  }
+
+  ws.onopen = () => {
+    console.log("WebSocket Connected")
+    ws.send(JSON.stringify(subscribeMsg))
+  }
+
+  ws.onmessage = (event) => {
+    const data = JSON.parse(event.data)
+    if (data.s && cryptoData[data.s]) {
+      updateCryptoData(data)
+    }
+  }
+
+  function updateCryptoData(data) {
+    const symbol = data.s
+    const currentPrice = Number.parseFloat(data.c)
+    const priceChange = Number.parseFloat(data.P)
+
+    console.log(`Datos recibidos para ${symbol}:`, { currentPrice, priceChange })
+
+    cryptoData[symbol].prevPrice = cryptoData[symbol].price
+    cryptoData[symbol].price = currentPrice
+    cryptoData[symbol].change = priceChange
+
+    // Actualizar los elementos de animación y gráficos
+    if (symbol === "BTCUSDT") {
+      updateAnimatedPercentage(".animacionBTC", priceChange, currentPrice, ".precioBTCAni")
+      updateChart(symbol, currentPrice, priceChange)
+    } else if (symbol === "USDCUSDT") {
+      console.log("Actualizando USDT")
+      updateAnimatedPercentage(".animacionUsdt", priceChange, currentPrice, ".precioUSDTAni")
+      updateChart(symbol, currentPrice, priceChange)
+    }
+
+    updateWidget()
+  }
+
+  function updateAnimatedPercentage(selector, percentage, currentPrice, priceSelector) {
+    console.log(`updateAnimatedPercentage llamado para ${selector}`, { percentage, currentPrice })
+    const $element = $(selector)
+    const $priceElement = $(priceSelector)
+    const symbol = selector === ".animacionBTC" ? "BTCUSDT" : "USDCUSDT"
+    const prevPrice = cryptoData[symbol].prevPrice
+
+    const changeSymbol = currentPrice > prevPrice ? "▲" : currentPrice < prevPrice ? "▼" : "▲"
+    const formattedPercentage = `${changeSymbol} ${Math.abs(percentage).toFixed(2)}%`
+
+    const classPercentage =
+      currentPrice > prevPrice
+        ? "text-success-main"
+        : currentPrice < prevPrice
+          ? "text-danger-main"
+          : "text-success-main"
+
+    const currentPriceCustom = formatPrice(currentPrice)
+
+    // Actualizar el precio
+    //$priceElement.text(`$${currentPriceCustom}`)
+
+    // Animar el cambio
+    $element.animate({ opacity: 1 }, 100, function () {
+      $(this).removeClass("text-success-main text-danger-main")
+      $(this).addClass(classPercentage).html(formattedPercentage).animate({ opacity: 1 }, 100)
+    })
+  }
+
+  function formatPrice(price) {
+    return price >= 1
+      ? Number.parseFloat(price).toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })
+      : Number.parseFloat(price).toFixed(6)
+  }
+
+  function updateWidget() {
+    let widgetHtml = '<div class="row g-3">'
+
+    Object.entries(cryptoData).forEach(([pair, data]) => {
+
+      if (data.symbol === "USDT") return;  
+
+      const changeClass =
+        data.price > data.prevPrice ? "positive" : data.price < data.prevPrice ? "negative" : "positive"
+      const changeSymbol = data.price > data.prevPrice ? "▲" : data.price < data.prevPrice ? "▼" : "▲"
+      const priceFlashClass = data.price > data.prevPrice ? "price-flash" : ""
+
+      widgetHtml += `
+          <div class="col-md-6">
+            <div class="crypto-item d-flex align-items-center ${priceFlashClass} p-3 bg-light rounded">
+              <div class="d-flex align-items-center">
+                <img src="${icons[data.symbol]}" alt="${data.name}" class="crypto-icon me-2" style="width: 32px; height: 32px;">
+                <div>
+                  <div class="d-flex align-items-center">
+                    <span class="fw-semibold">${data.name}</span>
+                    <span class="text-muted ms-2">${data.symbol}</span>
+                  </div>
+                  <div class="mt-1">
+                    <span class="fw-bold">$${formatPrice(data.price)}</span>
+                    <span class="ms-2 ${changeClass}" style="font-size: 0.875rem;">
+                      ${changeSymbol} ${Math.abs(data.change).toFixed(2)}%
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `
+    })
+
+    widgetHtml += "</div>"
+    $("#cryptoWidget").html(widgetHtml)
+  }
+
+  ws.onerror = (error) => {
+    console.error("WebSocket Error:", error)
+  }
+
+  ws.onclose = () => {
+    console.log("WebSocket Closed. Reconnecting...")
+    setTimeout(() => {
+      window.location.reload()
+    }, 5000)
+  }
+
+  let isFirstLoad = true
+  const updateInterval = 1000 // 1 segundo
+
+  function scheduledUpdate() {
+    if (isFirstLoad) {
+      isFirstLoad = false
+      setTimeout(scheduledUpdate, updateInterval)
+    } else {
+      console.log("Ejecutando scheduledUpdate")
+      updateWidget()
+      updateChart("BTCUSDT", cryptoData["BTCUSDT"].price, cryptoData["BTCUSDT"].change)
+      updateChart("USDCUSDT", cryptoData["USDCUSDT"].price, cryptoData["USDCUSDT"].change)
+      setTimeout(scheduledUpdate, updateInterval)
+    }
+  }
+
+  // Inicia el proceso de actualización programada
+  scheduledUpdate()
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+</script>
 
 
 </body>

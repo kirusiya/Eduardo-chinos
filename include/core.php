@@ -5,24 +5,26 @@ error_reporting(E_ALL);
 
 session_start();
 
-include('./conex/conex.php');
-include('./clases/tron.php');
+include('conex/conex.php');
+include('clases/tron.php');
 
 $website = 'https://tronvault.io';
 
 if(
 	isset($_SESSION['cod_user']) and $_SESSION['cod_user']!="" &&
-	isset($_SESSION['nom_user']) and $_SESSION['nom_user']!=""
+	isset($_SESSION['email_user']) and $_SESSION['email_user']!=""
 
 ){
 	//good
 	$cod_user = $_SESSION['cod_user'];
-	$nom_user = $_SESSION['nom_user'];
+	$email_user = $_SESSION['email_user'];
 	
 }else{
 	echo "<script>window.location.href = '".$website."/login/'</script>";
 	
 }
+
+
 
 ?>
 

@@ -36,7 +36,7 @@ if(isset($_POST['user_name']) and isset($_POST['email_user']) and isset($_POST['
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wowdash - Bootstrap 5 Admin Dashboard HTML Template</title>
+  <title>Wallet</title>
   <link rel="icon" type="image/png" href="<?php echo $website;?>/assets/images/favicon.png" sizes="16x16">
   <!-- remix icon font css  -->
   <link rel="stylesheet" href="<?php echo $website;?>/assets/css/remixicon.css">
@@ -73,15 +73,15 @@ if(isset($_POST['user_name']) and isset($_POST['email_user']) and isset($_POST['
 
 <section class="auth bg-base d-flex flex-wrap">  
     <div class="auth-left d-lg-block d-none">
-        <div class="d-flex align-items-center flex-column h-100 justify-content-center">
-            <img src="<?php echo $website;?>/assets/images/auth/auth-img.png" alt="">
+        <div class="d-flex align-items-center flex-column h-100 justify-content-between">
+            <img src="<?php echo $website;?>/assets/images/tronvault.jpg" alt="">
         </div>
     </div>
     <div class="auth-right py-32 px-24 d-flex flex-column justify-content-center">
         <div class="max-w-464-px mx-auto w-100">
             <div>
-                <a href="<?php echo $website;?>" class="mb-40 max-w-290-px">
-                    <img src="<?php echo $website;?>/assets/images/logo.png" alt="">
+                <a href="<?php echo $website;?>" class="mb-40 max-w-100-px">
+                    <img src="<?php echo $website;?>/assets/images/logo-chatgpt.png" alt="">
                 </a>
                 <h4 class="mb-12">Sign Up to your Account</h4>
                 <p class="mb-32 text-secondary-light text-lg">Welcome back! please enter your detail</p>

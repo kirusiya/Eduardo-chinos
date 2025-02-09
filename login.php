@@ -10,11 +10,11 @@ if(isset($_POST['email_user']) and isset($_POST['pass_user'])){
     $pass_user = $_POST['pass_user'];
 
     $obc = new cTrons();
-    $result = $obc->loguearUsuario($email_user, $pass_user);
-
-    if($row = mysqli_fetch_array($result)){
-        $_SESSION['cod_user'] = $row['cod_user'];
-        $_SESSION['nom_user'] = $row['nom_user'];
+    $matriz = $obc->loguearUsuario($email_user, $pass_user);
+    $fila = mysqli_fetch_array($matriz);
+    if (isset($fila['cod_user']) && $fila['cod_user'] != "") {
+        $_SESSION['cod_user'] = $fila['cod_user'];
+        $_SESSION['email_user'] = $fila['email_user'];
         echo "<script>window.location.href = '".$website."';</script>";
     }else{
         $error = "Usuario o contraseña incorrectos";
@@ -26,7 +26,7 @@ if(isset($_POST['email_user']) and isset($_POST['pass_user'])){
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wowdash - Bootstrap 5 Admin Dashboard HTML Template</title>
+  <title>Wallet</title>
   <link rel="icon" type="image/png" href="<?php echo $website;?>/assets/images/favicon.png" sizes="16x16">
   <!-- remix icon font css  -->
   <link rel="stylesheet" href="<?php echo $website;?>/assets/css/remixicon.css">
@@ -64,14 +64,14 @@ if(isset($_POST['email_user']) and isset($_POST['pass_user'])){
 <section class="auth bg-base d-flex flex-wrap">  
     <div class="auth-left d-lg-block d-none">
         <div class="d-flex align-items-center flex-column h-100 justify-content-center">
-            <img src="<?php echo $website;?>/assets/images/auth/auth-img.png" alt="">
+            <img src="<?php echo $website;?>/assets/images/tronvault.jpg" alt="">
         </div>
     </div>
     <div class="auth-right py-32 px-24 d-flex flex-column justify-content-center">
         <div class="max-w-464-px mx-auto w-100">
             <div>
-                <a href="<?php echo $website;?>" class="mb-40 max-w-290-px">
-                    <img src="<?php echo $website;?>/assets/images/logo.png" alt="">
+                <a href="<?php echo $website;?>" class="mb-40 max-w-100-px">
+                    <img src="<?php echo $website;?>/assets/images/logo-chatgpt.png" alt="">
                 </a>
                 <h4 class="mb-12">Sign In to your Account</h4>
                 <p class="mb-32 text-secondary-light text-lg">Welcome back! please enter your detail</p>
@@ -98,7 +98,7 @@ if(isset($_POST['email_user']) and isset($_POST['pass_user'])){
                             <input class="form-check-input border border-neutral-300" type="checkbox" value="" id="remeber">
                             <label class="form-check-label" for="remeber">Remember me </label>
                         </div>
-                        <a href="javascript:void(0)" class="text-primary-600 fw-medium">Forgot Password?</a>
+                        <a href="javascript:void(0)" class="text-primary-600 fw-medium d-none">Forgot Password?</a>
                     </div>
                 </div>
 
