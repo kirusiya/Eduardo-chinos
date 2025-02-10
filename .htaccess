@@ -6,4 +6,7 @@ RewriteRule    ^login/?$    login.php    [NC,L]
 RewriteRule    ^logout/?$    logout.php    [NC,L]
 RewriteRule    ^register/?$    register.php    [NC,L]
 RewriteRule    ^profile/?$    profile.php    [NC,L]
+RewriteRule    ^security/?$    security.php    [NC,L]
+RewriteRule    ^recoverbackup/?$    recoverbackup.php    [NC,L]
+
 

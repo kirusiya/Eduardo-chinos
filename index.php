@@ -1,5 +1,40 @@
 <?php
 include('include/core.php');
+
+
+// Obtener datos del usuario
+$obc = new cTrons();
+$result = $obc->obtenerDatosUsuario($_SESSION['cod_user']);
+$user_data = mysqli_fetch_array($result);
+
+// Verificar si se encontró el usuario
+if(!isset($user_data['cod_user']) || $user_data['cod_user'] == "") {
+    echo "<script>window.location.href = '".$website."/logout/';</script>";
+}
+
+$nom_user = isset($user_data['nom_user']) ? $user_data['nom_user'] : '';
+$email_user = isset($user_data['email_user']) ? $user_data['email_user'] : '';
+$user_name = isset($user_data['user_name']) ? $user_data['user_name'] : '';
+$user_phone = isset($user_data['user_phone']) ? $user_data['user_phone'] : '';
+$user_country = isset($user_data['user_country']) ? $user_data['user_country'] : '';
+$user_pic = isset($user_data['user_pic']) ? $user_data['user_pic'] : '';
+
+
+
+?>
+
+<?php
+$amount_usdt_neto = 0.00;
+$amount_usdt = 0.00;
+$ob_us = new cTrons();
+$matriz_us = $ob_us->getUserCoinDataSaldo($_SESSION['cod_user']);
+$fila_us = mysqli_fetch_array($matriz_us);
+
+if(isset($fila_us['cod_coin']) && $fila_us['cod_coin']!==''){
+    $amount_usdt_neto = $fila_us['amount_coin'];
+    $amount_usdt = number_format($amount_usdt_neto, 2, '.', ',');
+
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,36 +76,36 @@ include('include/core.php');
 </head>
 
 <style>
-.crypto-item {
-  transition: all 0.3s ease;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
+    .crypto-item {
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    }
 
-.crypto-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+    .crypto-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
 
-.positive {
-  color: #16c784;
-}
+    .positive {
+    color: #16c784;
+    }
 
-.negative {
-  color: #ea3943;
-}
+    .negative {
+    color: #ea3943;
+    }
 
-.price-flash {
-  animation: flash 0.5s ease-in-out;
-}
+    .price-flash {
+    animation: flash 0.5s ease-in-out;
+    }
 
-@keyframes flash {
-  0% {
-    background-color: rgba(22, 199, 132, 0.1);
-  }
-  100% {
-    background-color: transparent;
-  }
-}
+    @keyframes flash {
+    0% {
+        background-color: rgba(22, 199, 132, 0.1);
+    }
+    100% {
+        background-color: transparent;
+    }
+    }
 
 
 </style>
@@ -114,7 +149,7 @@ include('include/core.php');
                         </div>
                         <div class="mt-3 d-flex flex-wrap justify-content-between align-items-center gap-1">
                             <div class="">
-                                <h6 class="mb-8 precioUSDTAni text-xl">$33,550,700.98</h6>
+                                <h6 class="mb-8 precioUSDTAni text-xl">$<?php echo $amount_usdt;?></h6>
                                 <span class="animacionUsdt text-success-main text-md">+ 0.00%</span> 
                             </div>
                             <div id="usdtAreaChart" class="remove-tooltip-title rounded-tooltip-value"></div>
@@ -232,6 +267,176 @@ include('include/core.php');
 
         </div>
         <!-- Crypto Home Widgets End -->
+
+
+        <div class="row gy-4 mt-4">
+
+            <div class="col-xxl-12 col-lg-12">
+                <div class="card h-100">
+                    <div class="card-body p-24">
+                        <span class="mb-4 text-sm text-secondary-light">Total Balance</span>
+                        <h6 class="mb-4">
+                            <?php 
+                            $total_balance = $amount_usdt_neto + 9400670.40;
+                            $total_balance = number_format($total_balance, 2, '.', ',');
+                            ?>
+                            $<?php echo $total_balance;?>
+                        </h6>
+
+                        <ul class="nav nav-pills pill-tab mb-24 mt-28 border input-form-light p-1 radius-8 bg-neutral-50" id="pills-tab-tran" role="tablist">
+                            <li class="nav-item w-50" role="presentation">
+                                <button class="nav-link px-12 py-10 text-md w-100 text-center radius-8 active" id="pills-enviar-tab" data-bs-toggle="pill" data-bs-target="#pills-enviar" type="button" role="tab" aria-controls="pills-enviar" aria-selected="true">Receive</button>
+                            </li>
+                            <li class="nav-item w-50" role="presentation">
+                                <button class="nav-link px-12 py-10 text-md w-100 text-center radius-8" id="pills-recibir-tab" data-bs-toggle="pill" data-bs-target="#pills-recibir" type="button" role="tab" aria-controls="pills-recibir" aria-selected="false">Send</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="pills-enviar" role="tabpanel" aria-labelledby="pills-enviar-tab" tabindex="0">
+                                
+                                <div class="mb-20 text-center">  
+
+                                    <!-- Accordion Container -->
+                                    <div class="accordion" id="cryptoAccordion">
+                                        <!-- USDT Accordion Item -->
+                                        
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUSDT" aria-expanded="false" aria-controls="collapseUSDT">
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="<?php echo $website;?>/assets/images/currency/crypto-img6.png" alt="USDT" class="me-3" style="width: 32px; height: 32px;">
+                                                        <span class="fw-bold">Tether</span>
+                                                        <span class="text-muted ms-2">USDT $<?php echo $amount_usdt?></span>
+                                                    </div>
+                                                </button>
+                                            </h2>
+                                            <div id="collapseUSDT" class="mt-20 accordion-collapse collapse" data-bs-parent="#cryptoAccordion">
+                                                <div class="accordion-body">
+                                                    <?php
+                                                    $email_user;   
+                                                    ?>
+
+                                                    <image src=""
+                                                        class="mb-20 w-240-px  text-center d-none" id="imageQR">
+
+
+                                                    <div id="CopySuccess" class="alert alert-success bg-success-100 text-success-600 border-success-100 px-24 py-11 mb-0 fw-semibold text-lg radius-8 d-flex align-items-center justify-content-between mb-20 max-w-440-px d-none" role="alert" style="margin: 0 auto;">
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <iconify-icon icon="akar-icons:double-check" class="icon text-xl"></iconify-icon>
+                                                            Data Copied Successfully! 
+                                                        </div>
+                                                        <button class="remove-button text-success-600 text-xxl line-height-1"> <iconify-icon icon="iconamoon:sign-times-light" class="icon"></iconify-icon></button>
+                                                    </div>    
+
+                                                    <div class="input-group">
+                                                        <input type="mail" id="sendMail" name="sendMail" class="form-control" value="<?php echo $email_user;?>" placeholder="example@mail.com" style="pointer-events:none;" />
+                                                        <button id="copyMail" type="button" class="input-group-text bg-base">
+                                                            <iconify-icon icon="lucide:copy"></iconify-icon>   
+                                                            Copy
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- BTC Accordion Item -->
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBTC" aria-expanded="false" aria-controls="collapseBTC">
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="<?php echo $website;?>/assets/images/currency/crypto-img1.png" alt="Ethereum" class="me-3" style="width: 32px; height: 32px;">
+                                                        <span class="fw-bold">Bitcoin</span>
+                                                        <span class="text-muted ms-2">BTC</span>
+                                                    </div>
+                                                </button>
+                                            </h2>
+                                            <div id="collapseBTC" class="mt-20 accordion-collapse collapse" data-bs-parent="#cryptoAccordion">
+                                                <div class="accordion-body">
+                                                    <p>Soon</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                                    <!-- -->
+
+                                    
+                                </div>
+                                
+                                
+                            </div>
+                            <div class="tab-pane fade" id="pills-recibir" role="tabpanel" aria-labelledby="pills-recibir-tab" tabindex="0">
+
+                                <div class="d-flex justify-content-end mb-3">
+                                    <button id="btnScanQR" type="button" class="btn btn-dark p-0" style="width: 50px; height: 50px;">
+                                        <iconify-icon icon="mdi:qrcode" width="50" height="50"></iconify-icon>
+                                    </button>
+                                </div>
+
+                                <div class="mb-20">  
+                                    <label for="estimatedValueSell" class="fw-semibold mb-8 text-primary-light">Enter the email to send</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-base">
+                                            <iconify-icon icon="mynaui:envelope"></iconify-icon>
+                                        </span>
+                                        <input type="text" class="form-control flex-grow-1" name="mailToSend"  id="mailToSend" placeholder="example@gmail.com">
+                                    </div>
+
+                                </div>
+                                <div class="mb-20">  
+                                    <label for="tradeValueSell" class="fw-semibold mb-8 text-primary-light">Amount to Send</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-base">
+                                            <iconify-icon icon="lucide:dollar-sign"></iconify-icon>
+                                        </span>
+                                        <input type="number" name="amountToSend"  id="amountToSend" class="form-control flex-grow-1" placeholder="100.00">
+                                    </div>
+
+                                </div>
+                                
+                                <div id="sucessSend" class="alert alert-success bg-success-100 text-success-600 border-success-100 px-24 py-11 mb-0 fw-semibold text-lg radius-8 d-flex align-items-center justify-content-between mb-24  d-none" role="alert">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <iconify-icon icon="akar-icons:double-check" class="icon text-xl"></iconify-icon>
+                                        Transfer sent successfully!
+                                    </div>
+                                    <button class="remove-button text-success-600 text-xxl line-height-1"> <iconify-icon icon="iconamoon:sign-times-light" class="icon"></iconify-icon></button>
+                                </div>
+
+                                <div id="errorSend" class="alert alert-danger bg-danger-100 text-danger-600 border-danger-100 px-24 py-11 mb-0 fw-semibold text-lg radius-8 d-flex align-items-center justify-content-between mb-24 d-none" role="alert">
+                                    <div class="d-flex align-items-center gap-2  ">
+                                        <iconify-icon icon="mdi:alert-circle-outline" class="icon text-xl"></iconify-icon>
+                                        You do not have sufficient funds for this transaction
+                                    </div>
+                                    <button class="remove-button text-danger-600 text-xxl line-height-1"> <iconify-icon icon="iconamoon:sign-times-light" class="icon"></iconify-icon></button>
+                                </div>
+
+                                <div id="errorUserSend" class="alert alert-danger bg-danger-100 text-danger-600 border-danger-100 px-24 py-11 mb-0 fw-semibold text-lg radius-8 d-flex align-items-center justify-content-between mb-24 d-none" role="alert">
+                                    <div class="d-flex align-items-center gap-2  ">
+                                        <iconify-icon icon="mdi:alert-circle-outline" class="icon text-xl"></iconify-icon>
+                                        Invalid email, user not found!
+                                    </div>
+                                    <button class="remove-button text-danger-600 text-xxl line-height-1"> <iconify-icon icon="iconamoon:sign-times-light" class="icon"></iconify-icon></button>
+                                </div>
+
+                                <div id="errorSendError" class="alert alert-danger bg-danger-100 text-danger-600 border-danger-100 px-24 py-11 mb-0 fw-semibold text-lg radius-8 d-flex align-items-center justify-content-between mb-24 d-none" role="alert">
+                                    <div class="d-flex align-items-center gap-2  ">
+                                        <iconify-icon icon="mdi:alert-circle-outline" class="icon text-xl"></iconify-icon>
+                                        An error occurred during the transfer
+                                    </div>
+                                    <button class="remove-button text-danger-600 text-xxl line-height-1"> <iconify-icon icon="iconamoon:sign-times-light" class="icon"></iconify-icon></button>
+                                </div>
+
+                                
+                                <input type="hidden" id="symbol_coin" name="symbol_coin" value="USDT">
+                                <button id="btnSendUSDT" type="button" class="btn btn-primary text-sm btn-sm px-8 py-12 w-100 radius-8"> Transfer Now</button>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div><!-- fin row-->            
 
         <div class="row gy-4 mt-4">
             <div class="col-xxl-8">
@@ -900,6 +1105,159 @@ include('include/core.php');
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="<?php echo $website;?>/assets/js/homeFourChart.js"></script> 
 
+<!-- First, include the qrcode.js library in your HTML file -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+
+<!-- Add this HTML for the scanner modal -->
+<div id="scannerModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Scan QR Code</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <video id="qr-video" playsinline style="width: 100%; height: auto;"></video>
+                <canvas id="qr-canvas" class="d-none"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.3.1/dist/jsQR.min.js"></script>
+<script>
+$(document).ready(function() {
+    let scanning = false;
+    let videoElement = document.getElementById('qr-video');
+    let canvasElement = document.getElementById('qr-canvas');
+    let canvas = canvasElement.getContext('2d');
+    let scannerModal = new bootstrap.Modal(document.getElementById('scannerModal'));
+
+    $('#btnScanQR').on('click', function() {
+        if (scanning) {
+            stopScanning();
+        } else {
+            startScanning();
+        }
+    });
+
+    function startScanning() {
+        scanning = true;
+        scannerModal.show();
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+            .then(function(stream) {
+                videoElement.srcObject = stream;
+                videoElement.setAttribute("playsinline", true);
+                videoElement.play();
+                requestAnimationFrame(tick);
+            })
+            .catch(function(err) {
+                console.error("Error accessing the camera", err);
+                alert("Error accessing the camera. Please make sure you've granted permission.");
+                scanning = false;
+                scannerModal.hide();
+            });
+    }
+
+    function stopScanning() {
+        scanning = false;
+        if (videoElement.srcObject) {
+            videoElement.srcObject.getTracks().forEach(track => track.stop());
+        }
+        scannerModal.hide();
+    }
+
+    $('#scannerModal').on('hidden.bs.modal', function () {
+        stopScanning();
+    });
+
+    function tick() {
+        if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
+            canvasElement.height = videoElement.videoHeight;
+            canvasElement.width = videoElement.videoWidth;
+            canvas.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+            var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+            var code = jsQR(imageData.data, imageData.width, imageData.height, {
+                inversionAttempts: "dontInvert",
+            });
+            if (code) {
+                if (isValidEmail(code.data)) {
+                    $('#mailToSend').val(code.data);
+                    stopScanning();
+                }
+            }
+        }
+        if (scanning) {
+            requestAnimationFrame(tick);
+        }
+    }
+
+    function isValidEmail(email) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+});
+</script>
+
+
+
+
+
+<!-- Then, add this script after including jQuery and the qrcode.js library -->
+<script>
+$(document).ready(function() {
+    // Function to generate QR code and update image
+    function generateQRCode() {
+        // Get the email from the PHP variable
+        var email = "<?php echo $email_user; ?>";
+        
+        // Create a QR code
+        var qr = new QRCode(document.createElement("div"), {
+            text: email,
+            width: 128,
+            height: 128
+        });
+        
+        // Get the data URL of the QR code
+        var dataURL = qr._el.firstChild.toDataURL("image/png");
+        
+        // Set the src of the image to the QR code data URL
+        $("#imageQR").attr("src", dataURL);
+        
+        // Remove the d-none class to show the image
+        $("#imageQR").removeClass("d-none");
+    }
+    
+    // Call the function when the page loads
+    generateQRCode();
+});
+</script>
+
+<script>
+$(document).ready(function() {
+    $("#copyMail").on("click", function() {
+        // Get the input field
+        var copyText = document.getElementById("sendMail");
+
+        // Select the text in the input field
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+
+        // Copy the text to the clipboard
+        document.execCommand("copy");
+
+        // Optionally, you can provide some visual feedback
+        $('#CopySuccess').removeClass("d-none");
+
+        // Reset the button text and style after 2 seconds
+        setTimeout(function() {
+            $('#CopySuccess').addClass("d-none");
+        }, 1500);
+    });
+});
+</script>
+
 
 
 <script>
@@ -1256,38 +1614,58 @@ $(document).ready(() => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
 </script>
 
+<script>    
+    $('.remove-button').on('click', function() {
+        $(this).closest('.alert').addClass('d-none')
+    }); 
+</script>
 
+<script>
+$(document).ready(function() {
+    $('#btnSendUSDT').on('click', function() {
+        var mailToSend = $('#mailToSend').val();
+        var amountToSend = $('#amountToSend').val();
+        var symbol_coin = $('#symbol_coin').val();
+
+        $.ajax({
+            url: '<?php echo $website; ?>/ajax.php',
+            type: 'POST',
+            data: {
+                action: 'transferUSDT',
+                mailToSend: mailToSend,
+                amountToSend: amountToSend,
+                symbol_coin: symbol_coin
+            },
+            success: function(response) {
+                $('#pills-recibir .alert').addClass('d-none');
+
+                if (response.trim() === 'ok') {
+                    $('#sucessSend').removeClass('d-none');
+
+                    $('#mailToSend').val('');
+                    $('#amountToSend').val('');
+                    setTimeout(function() {
+                        $('#sucessSend').addClass("d-none");
+                    }, 2000);
+                    
+                } else if (response.trim() === 'insufficient_funds') {
+                    $('#errorSend').removeClass('d-none');
+                } else if (response.trim() === 'user_not_found') {
+                    $('#errorUserSend').removeClass('d-none');
+                } else {
+                    $('#errorSendError').removeClass('d-none');
+                }
+            },
+            error: function() {
+                alert('An error occurred while processing your request');
+            }
+        });
+    });
+
+});
+</script>
 </body>
 </html>
 

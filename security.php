@@ -83,7 +83,7 @@ $avatar_profile = (!empty($user_pic) && $user_pic !== '') ? "avatar/".$user_pic 
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>Profile - TronVault</title>
+ <title>Security - BackUp</title>
  <link rel="icon" type="image/png" href="<?php echo $website;?>/assets/images/favicon.png" sizes="16x16">
  <!-- remix icon font css  -->
  <link rel="stylesheet" href="<?php echo $website;?>/assets/css/remixicon.css">
@@ -124,20 +124,107 @@ $avatar_profile = (!empty($user_pic) && $user_pic !== '') ? "avatar/".$user_pic 
    
    <div class="dashboard-main-body">
        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
-         <h6 class="fw-semibold mb-0">View Profile</h6>
+         <h6 class="fw-semibold mb-0">Back Up</h6>
          <ul class="d-flex align-items-center gap-2">
            <li class="fw-medium">
              <a href="<?php echo $website;?>" class="d-flex align-items-center gap-1 hover-text-primary">
                <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
-               Dashboard
+               Security
              </a>
            </li>
            <li>-</li>
-           <li class="fw-medium">View Profile</li>
+           <li class="fw-medium">BackUp</li>
          </ul>
        </div>
 
-       <div class="row gy-4">
+
+
+
+
+
+<section class="row gy-4">
+    <div class="col-lg-6">
+        <div class="card h-100 p-0">
+            <div class="card-header border-bottom bg-base py-16 px-24">
+                <h6 class="text-lg fw-semibold mb-0">Secret Phrase</h6>
+                <p>Enter a 12-word recovery phrase to restore your wallet at any time.</p>
+            </div>
+            <div class="card-body p-24">
+                <div class="d-flex flex-wrap align-items-center gap-3">
+                    <button id="generate-btn" type="button" class="btn btn-warning-100 text-warning-600 radius-8 px-32 py-11" 
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        data-bs-custom-class="tooltip-warning"
+                        data-bs-title="Generate a 12-word phrase">
+                        Generate the 12 words
+                    </button>
+                    <button id="download-btn" type="button" class="btn btn-primary-50 text-primary-600 radius-8 px-32 py-11" disabled>
+                        Download
+                    </button>
+                </div>
+                <div id="phrase-container" class="mt-3 text-lg fw-semibold"></div>
+                <div class="alert alert-warning mt-3" role="alert">
+                    Store your 12 words in a safe place.
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    const words = [
+        "apple", "banana", "cherry", "dragon", "elephant", "falcon", "grape", "hammer", "island", "jungle", "kite", "lemon", "mountain", "notebook", "octopus", "piano", "quartz", "river", "sunshine", "tornado", "umbrella", "volcano", "whistle", "xylophone", "yogurt", "zeppelin",
+        "anchor", "breeze", "cactus", "diamond", "emerald", "feather", "galaxy", "horizon", "iceberg", "journey", "koala", "labyrinth", "meteor", "nebula", "ocean", "parrot", "quiver", "rainbow", "spectrum", "treasure", "universe", "voyager", "wildflower", "xenon", "yellow", "zenith",
+        "avalanche", "boulder", "cinnamon", "dolphin", "echo", "firefly", "gondola", "harbor", "iguana", "jigsaw", "kangaroo", "lantern", "meadow", "nomad", "opal", "penguin", "quokka", "ripple", "seagull", "topaz", "uplift", "valley", "wander", "xerox", "yodel", "zebra"
+    ];
+    let generatedWords = [];
+    
+    document.getElementById("generate-btn").addEventListener("click", function() {
+        if (generatedWords.length === 0) {
+            generatedWords = [];
+            while (generatedWords.length < 12) {
+                let randomWord = words[Math.floor(Math.random() * words.length)];
+                if (!generatedWords.includes(randomWord)) {
+                    generatedWords.push(randomWord);
+                }
+            }
+            
+            const phraseContainer = document.getElementById("phrase-container");
+            phraseContainer.innerHTML = generatedWords.map((word, index) => `${index + 1}. ${word}`).join("<br>");
+            
+            document.getElementById("download-btn").disabled = false;
+        }
+    });
+    
+    document.getElementById("download-btn").addEventListener("click", function() {
+        if (generatedWords.length > 0) {
+            const text = generatedWords.map((word, index) => `${index + 1}. ${word}`).join("\n");
+            const blob = new Blob([text], { type: "text/plain" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "recovery-phrase.txt";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    });
+</script>
+
+
+	   
+	   
+	   
+	   
+	
+
+	   
+	   
+	   
+	   
+	   
+
+
+     <!--  <div class="row gy-4">
            <div class="col-lg-4">
                <div class="user-grid-card position-relative border radius-16 overflow-hidden bg-base h-100">
                    <img src="<?php echo $website;?>/assets/images/user-grid/user-grid-bg1.png" alt="" class="w-100 object-fit-cover">
@@ -174,12 +261,16 @@ $avatar_profile = (!empty($user_pic) && $user_pic !== '') ? "avatar/".$user_pic 
                        </div>
                    </div>
                </div>
-           </div>
-           <div class="col-lg-8">
+           </div>-->
+
+
+
+
+      <!--     <div class="col-lg-8">
                <div class="card h-100">
                    <div class="card-body p-24">
 
-                        <!-- verificaciones -->
+                        <!-- verificaciones 
                         <?php if($error === 0): ?>
                         <div class="alert alert-success bg-success-100 text-success-600 border-success-100 px-24 py-11 mb-0 fw-semibold text-lg radius-8 d-flex align-items-center justify-content-between mb-20" role="alert">
                             <div class="d-flex align-items-center gap-2">
@@ -208,20 +299,24 @@ $avatar_profile = (!empty($user_pic) && $user_pic !== '') ? "avatar/".$user_pic 
                             </div>
                             <button class="remove-button text-success-600 text-xxl line-height-1"> <iconify-icon icon="iconamoon:sign-times-light" class="icon"></iconify-icon></button>
                         </div>
-                        <?php endif; ?>
+                        <?php endif; ?>-->
+
+
+
+
                         <!-- verificaciones -->
 
                         <!-- error pass -->
-                        <div id="pass_error" class="alert alert-danger bg-danger-100 text-danger-600 border-danger-100 px-24 py-11 mb-0 fw-semibold text-lg radius-8 d-flex align-items-center justify-content-between  mb-20 d-none" role="alert">
+                       <!-- <div id="pass_error" class="alert alert-danger bg-danger-100 text-danger-600 border-danger-100 px-24 py-11 mb-0 fw-semibold text-lg radius-8 d-flex align-items-center justify-content-between  mb-20 d-none" role="alert">
                             <div class="d-flex align-items-center gap-2">
                                 <iconify-icon icon="mdi:alert-circle-outline" class="icon text-xl"></iconify-icon>
                                 <span class="alert-content">Passwords are not equal!! </span>
                             </div>
                             <button class="remove-button text-danger-600 text-xxl line-height-1"> <iconify-icon icon="iconamoon:sign-times-light" class="icon"></iconify-icon></button>
                         </div>        
-                        <!-- error pass -->
+                        error pass -->
 
-                       <ul class="nav border-gradient-tab nav-pills mb-20 d-inline-flex" id="pills-tab" role="tablist">
+                      <!-- <ul class="nav border-gradient-tab nav-pills mb-20 d-inline-flex" id="pills-tab" role="tablist">
                            <li class="nav-item" role="presentation">
                              <button class="nav-link d-flex align-items-center px-24 active" id="pills-edit-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-edit-profile" type="button" role="tab" aria-controls="pills-edit-profile" aria-selected="true">
                                Edit Profile 
@@ -242,7 +337,11 @@ $avatar_profile = (!empty($user_pic) && $user_pic !== '') ? "avatar/".$user_pic 
                        <div class="tab-content" id="pills-tabContent">   
                            <div class="tab-pane fade show active" id="pills-edit-profile" role="tabpanel" aria-labelledby="pills-edit-profile-tab" tabindex="0">
                                <h6 class="text-md text-primary-light mb-16">Profile Image</h6>
-                               <!-- Upload Image Start -->
+
+
+                              Upload Image Start 
+
+
                                <div class="mb-24 mt-16">
                                    <div class="avatar-upload">
                                            <div class="avatar-edit position-absolute bottom-0 end-0 me-24 mt-16 z-1 cursor-pointer">
@@ -258,15 +357,27 @@ $avatar_profile = (!empty($user_pic) && $user_pic !== '') ? "avatar/".$user_pic 
 
                                    </div>
 
-                                   <!-- barra de progreso -->
+                                  barra de progreso 
+
+
+
                                    <div id="progressImage" class="progress h-8-px  bg-primary-50 mt-20 w-50 d-none" role="progressbar" aria-label="Basic example" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated rounded-pill bg-primary-600" style="width: 20%"></div>
                                     </div>
-                                    <!-- barra de progreso -->
+
+
+
+                                    barra de progreso 
+
+
 
                                    
                                </div>
-                               <!-- Upload Image End -->
+
+                        Upload Image End 
+
+
+
                                <form action="" method="post">
                                    <div class="row">
                                        <div class="col-sm-6">
@@ -371,7 +482,7 @@ $avatar_profile = (!empty($user_pic) && $user_pic !== '') ? "avatar/".$user_pic 
                                        <input class="form-check-input" type="checkbox" role="switch" id="orderNotification" checked>
                                    </div>
                                </div>
-                           </div>
+                           </div>-->
 
                        </div>
                    </div>
